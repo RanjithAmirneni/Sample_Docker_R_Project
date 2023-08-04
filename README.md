@@ -14,37 +14,3 @@
 * Build an image
 * Run a container with Rstudio
 * Connect to that container and check the project code.
-
-
-
-name: App Build
-
-on:
-  push:
-    branches:
-      - main
-    tags:
-      - v*
-
-  pull_request:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - run: echo "LOWERCASE_REPO=$(echo ${{ github.event.repository.name }} | tr [A-Z] [a-z])" >> $GITHUB_ENV
-    - name: Checkout
-      uses: actions/checkout@v2.2.0
-    - name: Build and push Docker images
-      uses: docker/build-push-action@v1
-      with:
-        username: ${{ secrets.LIGHT_DOCKER_USER }}
-        password: ${{ secrets.LIGHT_DOCKER_TOKEN }}
-        tag_with_ref: true
-        tag_with_sha:  true
-        add_git_labels: true
-        registry: ${{ secrets.LIGHT_DOCKER_REPOSITORY_URL }}
-        repository: ${{ env.LOWERCASE_REPO }}
-
-
-
